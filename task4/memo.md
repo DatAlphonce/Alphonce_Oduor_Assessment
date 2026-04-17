@@ -1,1 +1,1 @@
-
+A model performing well in internship might not mean it's ready for production since most first of all historical data that was used during internship might have bias issues on how the model should learn today hence the need to evaluate the model performance. Again, you'd find that with the chances, an iteration needs to be conducted to ensure the model generalizes well with new data instead of historical so it can make informed decisions.
