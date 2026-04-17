@@ -1,1 +1,1 @@
-I checked for missing values in the data set and found out that the assessment_score and project_score column were missing 1 enty each. So I went ahead and identify which student was missing - it was Mwangi Ethan. I proceed to adding it
+I checked for missing values in the data set and found out that the assessment_score and project_score column were missing 1 enty each. So I went ahead and identify which student was missing - it was Mwangi Ethan and Faiza. I proceed to adding it
