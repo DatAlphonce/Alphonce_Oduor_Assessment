@@ -5,8 +5,8 @@ def load_data(path):
     return data
 
 def clean_data(df):
-    # remove duplicates
-    df = df.drop_duplicates
+    # remove duplicates and create a fresh copy to avoid SettingWithCopyWarning
+    df = df.drop_duplicates().copy()
 
     # standardize track names
     df["track"] = df["track"].replace({
@@ -15,11 +15,12 @@ def clean_data(df):
     })
 
     # fill missing numeric values
-    df["assessment_score"] = df["assessment_score"].fillna(df["assessment_score"].mean)
-    df["project_score"] = df["project_score"].fillna(df["project_score"].mean)
+    df["assessment_score"] = df["assessment_score"].fillna(df["assessment_score"].mean())
+    df["project_score"] = df["project_score"].fillna(df["project_score"].mean())
 
-    # remove rows with impossible scores
-    df = df[df["assessment_score"] < 1000]
+    # remove rows with impossible scores (e.g., negative scores, or scores above 1000)
+    # This is the added validation check for non-negative scores.
+    df = df[(df["assessment_score"] >= 0) & (df["project_score"] >= 0) & (df["assessment_score"] < 1000)]
 
     # normalize gender
     df["gender"] = df["gender"].replace({
@@ -37,7 +38,7 @@ def rank_candidates(df):
         df["missing_documents"] * 5 -
         df["days_since_application"] / 2
     )
-    return df.sort_values("final_score", ascending="False")
+    return df.sort_values("final_score", ascending=False)
 
 def summarize(df):
     print("Candidate count:", len(df))
@@ -47,12 +48,12 @@ def summarize(df):
     print(df[["candidate_id", "name", "track", "final_score"]].head(5))
 
     print("\nAverage score by track:")
-    print(df.groupby("track")["final_score"].average())
+    print(df.groupby("track")["final_score"].mean())
 
 def main():
-    df = load_data("intern_application.csv")
+    df = load_data("intern_applications.csv")
     df = clean_data(df)
     ranked = rank_candidates(df)
     summarize(ranked)
 
-main
+main()
